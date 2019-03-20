@@ -1,8 +1,9 @@
 import sys
 import os
 import datetime
-
+import ipaddress
 import argumentparser
+
 
 
 def initialrun():
@@ -14,12 +15,13 @@ def initialrun():
 
 def main():
     parser = argumentparser.parsing()
-    args = parser.parse_known_args()
+    args = parser.parse_args()
     if args is not None:
-        print("In main")
-    else:
-        sys.exit("No valid arguments specified")
-
+        try:
+            ipaddr = ipaddress.ip_address(args.target)
+            ipaddrstr = args.target
+            print(ipaddrstr)
+        except ValueError:
+            sys.exit("Invalid IP Address entered. \nProgram now exiting")
 if __name__ == '__main__':
-    print("The application is now running....")
     main()
