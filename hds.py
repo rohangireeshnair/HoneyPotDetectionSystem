@@ -3,7 +3,7 @@ import os
 import datetime
 import ipaddress
 import argumentparser
-
+from portscan.basicportscan import PortScan
 
 
 def initialrun():
@@ -20,7 +20,7 @@ def main():
         try:
             ipaddr = ipaddress.ip_address(args.target)
             ipaddrstr = args.target
-            print(ipaddrstr)
+            prtscan = PortScan(target=ipaddrstr,portrange=args.portrange,osscan=args.osscan,synscan=args.synscan,verbose=args.verbose)
         except ValueError:
             sys.exit("Invalid IP Address entered. \nProgram now exiting")
 if __name__ == '__main__':

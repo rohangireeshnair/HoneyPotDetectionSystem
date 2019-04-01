@@ -20,6 +20,8 @@ class PortScan:
         self.verbose = verbose
         self.openport_tcp = []
         self.openport_udp = []
+        self.tcpbanner = {}
+        self.udpbanner = {}
 
         nmapscnr = nmap.PortScanner()
         arg = None
@@ -51,5 +53,5 @@ class PortScan:
 
     def otcpports(self):
         return self.openport_tcp
-    def oudpposrts(self):
+    def oudpports(self):
         return self.openport_udp
