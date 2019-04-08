@@ -2,6 +2,8 @@ import sys
 import nmap
 import os
 import logging
+import urllib
+import socket
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +27,9 @@ class PortScan:
         self.openport_udp = []
         self.tcpbanner = {}
         self.udpbanner = {}
+        self.websites = []
+        self.css = []
+
 
         self.nmapscnr = nmap.PortScanner()
         arg = None
@@ -73,3 +78,53 @@ class PortScan:
             return osresult
         else:
             return -1
+    def get_target_website(self):
+        result = self.get_service('http', 'tcp')
+        for target_port in result:
+            try:
+
+                request = urllib.request.urlopen('http://' + self.target + ':' + str(target_port) + '/',
+                                                 timeout=5)
+
+                if request.headers.get_content_charset() is None:
+                    content = request.read()
+                else:
+                    content = request.read().decode(request.headers.get_content_charset())
+
+                self.websites.append(content)
+
+            except Exception as e:
+                logger.info("Failed to fetch the web data")
+        return self.websites
+
+    def get_web_css(self):
+        result = self.get_service('http', 'tcp')
+        for target_port in result:
+            try:
+                request = urllib.request.urlopen('http://' + self.ip + ':' + str(target_port) + '/style.css',
+                                                 timeout=5)
+
+                if request.headers.get_content_charset() is None:
+                    content = request.read()
+                else:
+                    content = request.read().decode(request.headers.get_content_charset())
+
+                self.css.append(content)
+
+            except Exception as e:
+                logger.info("Failed to fetch the stylesheet")
+
+            return self.css
+
+        def get_banner(self, port, protocol='tcp'):
+
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(5)
+
+            try:
+                s.connect((self.address, port))
+                recv = s.recv(1024)
+            except socket.error as e:
+                raise Exception("Banner grab failed for port", port, e)
+
+             return recv
