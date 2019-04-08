@@ -1,7 +1,7 @@
 import sys
 import socket
 import logging
-from portscan.basicportscan import PortScan
+from Target.target import PortScan
 
 def bannergrab(targetobj, ipadr):
     tcpports=targetobj.otcpports()

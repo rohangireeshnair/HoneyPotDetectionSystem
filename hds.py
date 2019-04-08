@@ -3,7 +3,7 @@ import os
 import datetime
 import ipaddress
 import argumentparser
-from portscan.basicportscan import PortScan
+from Target.target import PortScan
 
 
 def initialrun():
