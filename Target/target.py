@@ -77,7 +77,9 @@ class PortScan:
         if len(osresult)>=1:
             return osresult
         else:
+            logger.info("Some error in returning results")
             return -1
+
     def get_target_website(self):
         result = self.get_service('http', 'tcp')
         for target_port in result:
@@ -125,6 +127,7 @@ class PortScan:
                 s.connect((self.address, port))
                 recv = s.recv(1024)
             except socket.error as e:
+                logger.info("Error in grabbing banner for the port" )
                 raise Exception("Banner grab failed for port", port, e)
 
              return recv
