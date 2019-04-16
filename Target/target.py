@@ -14,7 +14,7 @@ except ImportError:
     sys.exit("Install nmap python module. \nProgram exiting")
 
 
-class PortScan:
+class Target:
 
 
     def __init__(self, target, portrange, osscan, synscan, verbose):
@@ -29,6 +29,7 @@ class PortScan:
         self.udpbanner = {}
         self.websites = []
         self.css = []
+        self.pos_point = None
 
 
         self.nmapscnr = nmap.PortScanner()
@@ -77,9 +78,7 @@ class PortScan:
         if len(osresult)>=1:
             return osresult
         else:
-            logger.info("Some error in returning results")
             return -1
-
     def get_target_website(self):
         result = self.get_service('http', 'tcp')
         for target_port in result:
@@ -118,16 +117,21 @@ class PortScan:
 
             return self.css
 
-        def get_banner(self, port, protocol='tcp'):
+    def get_banner(self, port, protocol='tcp'):
 
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(5)
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(5)
 
-            try:
-                s.connect((self.address, port))
-                recv = s.recv(1024)
-            except socket.error as e:
-                logger.info("Error in grabbing banner for the port" )
-                raise Exception("Banner grab failed for port", port, e)
+        try:
+            s.connect((self.address, port))
+            recv = s.recv(1024)
+        except socket.error as e:
+            raise Exception("Banner grab failed for port", port, e)
 
-             return recv
+        return recv
+
+    def get_pos_point(self):
+        return self.pos_point
+
+    def set_pos_point(self, pos):
+        self.pos_point = pos
