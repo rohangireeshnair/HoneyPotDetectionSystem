@@ -1,7 +1,6 @@
 from test.test import Test
 
 import logging
-from Target.target import Target
 logger=logging.getLogger(__name__)
 
 class OsCombinationTest(Test):

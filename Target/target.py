@@ -64,6 +64,7 @@ class Target:
             if attr['name']==service:
                 result[str(port)]=attr
         return result
+
     def get_os_info(self):
         osresult = []
         try:
@@ -92,13 +93,6 @@ class Target:
                 result = attr['name']
                 break
         return result
-
-
-
-
-
-
-
 
     def get_target_website(self):
         result = self.get_ports('http', 'tcp')
