@@ -54,7 +54,7 @@ class Target:
     def oudpports(self):
         return self.openport_udp
 
-    def get_service(self,service,protocol):
+    def get_ports(self, service, protocol):
         result = {}
         if protocol=='tcp':
             ports = self.otcpports()
@@ -79,8 +79,29 @@ class Target:
             return osresult
         else:
             return -1
+
+
+    def get_services(self,portno,protocol):
+        result = None
+        if protocol=='tcp':
+            ports = self.otcpports()
+        elif protocol=='udp':
+            ports = self.oudpports()
+        for port, attr in ports.items():
+            if port == portno:
+                result = attr['name']
+                break
+        return result
+
+
+
+
+
+
+
+
     def get_target_website(self):
-        result = self.get_service('http', 'tcp')
+        result = self.get_ports('http', 'tcp')
         for target_port in result:
             try:
 
@@ -99,7 +120,7 @@ class Target:
         return self.websites
 
     def get_web_css(self):
-        result = self.get_service('http', 'tcp')
+        result = self.get_ports('http', 'tcp')
         for target_port in result:
             try:
                 request = urllib.request.urlopen('http://' + self.ip + ':' + str(target_port) + '/style.css',
