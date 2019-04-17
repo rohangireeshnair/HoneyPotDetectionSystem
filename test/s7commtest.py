@@ -48,4 +48,33 @@ class s7commtest(Test):
         elif c_flag:
             logger.info("Successfully Connected to s7 server.")
             time.sleep(10)
+            tuple1 = (17,17,17,28,28,28,28,28,28,28,28,28,28,28)
+            tuple2 = (1,6,7,1,2,3,4,5,6,7,8,9,10,11)
+            count1 = 0
+            count2 = 0
+
             data =self.s7client.GetIdentity(self.t_ip, self.t_port, self.src_tsap, self.dst_tsap)
+            if data:
+                for line in data:
+                    try:
+                        sec, item, val = line.split(";")
+                        if not(sec==str(tuple1[count1]) and item == str(tuple2[count2]) and len(val)>0):
+                            raise Exception
+                    except Exception:
+                        result = "FAIL"
+                        report = "{}:S7comm test failed as the values returned by the server are not complete. Could be a honeypot machine. Data recieved: {}.".format(
+                            self.get_test_name(), data)
+                        self.set_test_status(result, report)
+                        logger.info("S7comm test failed")
+                        return
+                result = "PASS"
+                report = "{}:Test successfully passed ".format(self.get_test_name())
+                self.set_test_status(result, report)
+                logger.info("S7comm test passed")
+                return
+            if not data:
+                result = "FAIL"
+                report = "{}:Failed as server couldn't deliver data of the PLC. Could be a honeypot machine.".format(self.get_test_name())
+                self.set_test_status(result, report)
+                logger.info("S7comm test failed as the server did not send PLC data")
+                return
