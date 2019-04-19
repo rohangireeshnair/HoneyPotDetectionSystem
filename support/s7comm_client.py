@@ -1,3 +1,10 @@
+"""
+Reused from mushorg/conpot.tests
+
+"""
+
+
+
 from struct import *
 from optparse import OptionGroup
 import struct
